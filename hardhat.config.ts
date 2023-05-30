@@ -40,6 +40,17 @@ const config = {
   },
   vyper: {
     compilers: [{ version: "0.2.7" }, { version: "0.3.1" }],
+  },
+  networks: {
+    hardhat: {},
+    spark: {
+      url: 'https://rpc.fusespark.io',
+      accounts: [`0x${process.env.PRIVATE_KEY}`]
+    },
+    fuse: {
+      url: 'https://rpc.fuse.io',
+      accounts: [`0x${process.env.PRIVATE_KEY}`]
+    }
   }
 };
 
