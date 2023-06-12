@@ -404,10 +404,6 @@ def claim_many(_receivers: address[20]) -> bool:
     return True
 
 @external
-def updateReward(_addr: address) -> bool:
-    return True
-
-@external
 def donate(_amount: uint256) -> bool:
     """
     @notice Receive VOLT into the contract and trigger a token checkpoint
