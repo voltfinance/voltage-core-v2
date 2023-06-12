@@ -138,7 +138,7 @@ def __init__(token_addr: address, _name: String[64], _symbol: String[32], _admin
 
 @external
 def set_reward_pool(addr: address):
-  assert msg.sender == self.admin or self.reward_pool == ZERO_ADDRESS # dev: admin only
+  assert msg.sender == self.admin # dev: admin only
   assert addr != ZERO_ADDRESS
   self.reward_pool = addr
 
