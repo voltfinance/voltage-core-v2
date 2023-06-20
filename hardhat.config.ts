@@ -10,25 +10,7 @@ const config = {
   solidity: {
     compilers: [
       {
-        version: "0.5.16",
-        settings: {
-          optimizer: {
-            runs: 9999,
-            enabled: true,
-          },
-        },
-      },
-      {
-        version: "0.8.4",
-        settings: {
-          optimizer: {
-            runs: 9999,
-            enabled: true,
-          },
-        },
-      },
-      {
-        version: "0.8.11",
+        version: "0.8.0",
         settings: {
           optimizer: {
             runs: 9999,
@@ -43,14 +25,14 @@ const config = {
   },
   networks: {
     hardhat: {},
-    spark: {
-      url: 'https://rpc.fusespark.io',
-      accounts: [`0x${process.env.PRIVATE_KEY}`]
-    },
-    fuse: {
-      url: 'https://rpc.fuse.io',
-      accounts: [`0x${process.env.PRIVATE_KEY}`]
-    }
+    // spark: {
+    //   url: 'https://rpc.fusespark.io',
+    //   accounts: [`0x${process.env.PRIVATE_KEY}`]
+    // },
+    // fuse: {
+    //   url: 'https://rpc.fuse.io',
+    //   accounts: [`0x${process.env.PRIVATE_KEY}`]
+    // }
   }
 };
 
