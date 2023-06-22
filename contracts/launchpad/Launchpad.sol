@@ -44,9 +44,6 @@ contract Launchpad is Ownable, ReentrancyGuard {
     /// @dev The snapshot time used to fetch historical user balances.
     uint256 public immutable snapshotTime;
 
-    /// @dev The time claiming begins.
-    uint256 public immutable claimStartTime;
-
     /// @dev The number of days for vesting.
     uint256 public immutable claimVestingDuration;
 
@@ -144,7 +141,6 @@ contract Launchpad is Ownable, ReentrancyGuard {
         endTime = _params.endTime;
         snapshotTime = _params.snapshotTime;
 
-        claimStartTime = _params.claimStartTime;
         claimVestingDuration = _params.claimVestingDuration;
     }
 
@@ -202,11 +198,11 @@ contract Launchpad is Ownable, ReentrancyGuard {
     function calculateUserClaim(
         address _user
     ) public view returns (uint256, uint256) {
-        if (block.timestamp < claimStartTime) {
+        if (block.timestamp < endTime) {
             return (0, 0);
         }
 
-        uint256 elapsedTime = block.timestamp - claimStartTime;
+        uint256 elapsedTime = block.timestamp - endTime;
         uint256 elapsedDays = elapsedTime / SECONDS_PER_DAY;
 
         UserInfo memory userInfo = usersInfo[_user];

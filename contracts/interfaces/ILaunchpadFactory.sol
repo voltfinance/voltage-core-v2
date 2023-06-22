@@ -13,7 +13,6 @@ struct LaunchpadParams {
     uint256 startTime;
     uint256 endTime;
     uint256 snapshotTime;
-    uint256 claimStartTime;
     uint256 claimVestingDuration;
     address projectTreasury;
 }
