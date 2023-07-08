@@ -170,8 +170,6 @@ describe('LaunchpadFactory', () => {
     })
 
     it('should fail if launch already created for token', async () => {
-      const timeNow = await getTimestamp()
-
       await factory.createLaunchpad(launchpadParams)
 
       await expect(factory.createLaunchpad(launchpadParams)).be.reverted
