@@ -5,6 +5,8 @@ import "@nomiclabs/hardhat-web3";
 import "@nomiclabs/hardhat-ethers";
 import "@nomiclabs/hardhat-vyper";
 import "hardhat-contract-sizer";
+import "solidity-coverage";
+import '@typechain/hardhat'
 
 const config = {
   solidity: {

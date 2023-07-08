@@ -8,7 +8,7 @@
     "skipLibCheck": true,
     "resolveJsonModule": true
   },
-  "include": ["./types/**/*.ts", "./test/**/*.ts", "./test-utils/**/*.ts"],
+  "include": ["./types/**/*.ts", "./test/**/*.ts", "./typechain-types", "./node_modules"],
   "files": [
       "./hardhat.config.ts"
   ]

@@ -3,6 +3,7 @@ pragma solidity ^0.8.0;
 
 import "@openzeppelin/contracts/access/Ownable.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 import "@openzeppelin/contracts/utils/math/Math.sol";
 import "@openzeppelin/contracts/security/ReentrancyGuard.sol";
 import "../interfaces/IVeVOLT.sol";
@@ -114,10 +115,6 @@ contract Launchpad is Ownable, ReentrancyGuard {
             "constructor: endTime should be after startTime"
         );
         require(
-            _params.claimStartTime > _params.endTime,
-            "constructor: claimTime should be after endTime"
-        );
-        require(
             _params.claimVestingDuration < 90,
             "constructor: vesting maximum 90 days"
         );
@@ -188,7 +185,7 @@ contract Launchpad is Ownable, ReentrancyGuard {
      */
     function getUserAllocation(address _user) public view returns (uint256) {
         UserInfo memory userInfo = usersInfo[_user];
-        return tokensToDistribute() * (userInfo.balance / saleTokenReserve);
+        return tokensToDistribute() * userInfo.balance / saleTokenReserve;
     }
 
     /**
@@ -228,7 +225,7 @@ contract Launchpad is Ownable, ReentrancyGuard {
         ).balanceOf(_user, snapshotTime);
 
         uint256 stakedUserAllocation = Math.min(
-            veVoltBalance * veVoltPerProjectToken,
+            veVoltBalance / veVoltPerProjectToken * (10**ERC20(saleToken).decimals()),
             stakedUserMaxBuyAmount
         );
 
@@ -241,7 +238,7 @@ contract Launchpad is Ownable, ReentrancyGuard {
      */
     function withdrawSaleTokens() public saleEnded {
         uint256 fee = (saleTokenReserve *
-            ILaunchpadFactory(launchpadFactory).launchFee()) /
+            ILaunchpadFactory(launchpadFactory).launchpadFee()) /
             ILaunchpadFactory(launchpadFactory).SCALE();
         uint256 amountWithoutFee = saleTokenReserve - fee;
 
@@ -268,7 +265,7 @@ contract Launchpad is Ownable, ReentrancyGuard {
     function buy(uint256 _amount) public saleActive nonReentrant {
         require(_amount > 0, "buy: amount > 0");
         require(
-            saleTokenReserve + _amount < maxSaleTokenReserve,
+            saleTokenReserve + _amount <= maxSaleTokenReserve,
             "buy: hardcap reached"
         );
 
@@ -276,7 +273,7 @@ contract Launchpad is Ownable, ReentrancyGuard {
 
         uint256 maxBuyAmount = getUserBuyAmount(msg.sender);
         require(
-            user.balance + _amount < maxBuyAmount,
+            user.balance + _amount <= maxBuyAmount,
             "buy: user hardcap reached"
         );
 
@@ -295,7 +292,7 @@ contract Launchpad is Ownable, ReentrancyGuard {
         UserInfo storage user = usersInfo[msg.sender];
 
         require(
-            _amount >= user.balance,
+            user.balance >= _amount,
             "withdraw: amount greater than balance"
         );
 

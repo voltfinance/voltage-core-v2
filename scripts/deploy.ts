@@ -1,43 +1,41 @@
 import { ethers } from "hardhat";
 
 async function main() {
-  // const VOLT_ADDRESS = process.env.VOLT_ADDRESS
-  // const ADMIN_ADDRESS = process.env.ADMIN_ADDRESS
+  const VOLT_ADDRESS = process.env.VOLT_ADDRESS
+  const ADMIN_ADDRESS = process.env.ADMIN_ADDRESS
 
-  // const VotingEscrow = await ethers.getContractFactory("VotingEscrow")
-  // const votingEscrow = await VotingEscrow.deploy(
-  //   VOLT_ADDRESS,
-  //   'Vote-escrowed VOLT',
-  //   'veVolt',
-  //   ADMIN_ADDRESS
-  // )
+  const VotingEscrow = await ethers.getContractFactory("VotingEscrow")
+  const votingEscrow = await VotingEscrow.deploy(
+    VOLT_ADDRESS,
+    'Vote-escrowed VOLT',
+    'veVolt',
+    ADMIN_ADDRESS
+  )
 
-  // await votingEscrow.deployed()
+  await votingEscrow.deployed()
 
-  // console.log(
-  //   `\nVolt voting lockup contract is deployed at ${votingEscrow.address}`
-  // )
+  console.log(
+    `\nVolt voting lockup contract is deployed at ${votingEscrow.address}`
+  )
 
-  // const startTime = parseInt(String((new Date().getTime() + (5 * 60 * 100)) / 1000))
+  const startTime = 1688126400
 
-  // const PenaltyDistributor = await ethers.getContractFactory("PenaltyDistributor");
-  // const penaltyDistributor = await PenaltyDistributor.deploy(
-  //   votingEscrow.address,
-  //   startTime,
-  //   VOLT_ADDRESS,
-  //   ADMIN_ADDRESS,
-  //   ADMIN_ADDRESS
-  // );
+  const PenaltyDistributor = await ethers.getContractFactory("PenaltyDistributor");
+  const penaltyDistributor = await PenaltyDistributor.deploy(
+    votingEscrow.address,
+    startTime,
+    VOLT_ADDRESS,
+    ADMIN_ADDRESS,
+    ADMIN_ADDRESS
+  );
 
-  // await penaltyDistributor.deployed();
+  await penaltyDistributor.deployed();
 
-  // console.log(
-  //   `\nPenalty distributor contract is deployed at ${penaltyDistributor.address}`
-  // )
+  console.log(
+    `\nPenalty distributor contract is deployed at ${penaltyDistributor.address}`
+  )
 
-  // await votingEscrow.set_reward_pool(penaltyDistributor.address)
-
-  const penaltyDistributor = await ethers.getContractAt( "PenaltyDistributor", "0x4071213F22eAfB340d6De1f684987C68010f9448")
+  await votingEscrow.set_reward_pool(penaltyDistributor.address)
 
   await penaltyDistributor.checkpoint_total_supply()
 }

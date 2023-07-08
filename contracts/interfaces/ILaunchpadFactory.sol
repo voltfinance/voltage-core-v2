@@ -19,7 +19,7 @@ struct LaunchpadParams {
 
 interface ILaunchpadFactory {
     function withdrawFee() external view returns (uint256);
-    function launchFee() external view returns (uint256);
+    function launchpadFee() external view returns (uint256);
     function SCALE() external view returns (uint256);
     function veVolt() external view returns (address);
     function owner() external view returns (address);
