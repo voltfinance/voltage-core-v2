@@ -30,10 +30,10 @@ contract Launchpad is Ownable, ReentrancyGuard {
     /// @dev The token used to contribute to the launch event.
     address public immutable saleToken;
 
-    /// @dev The maximum amount of sale tokens a staked user can contibute to the launch event.
+    /// @dev The maximum amount of sale tokens a staked user can contibute to the launch event in sale token decimals.
     uint256 public immutable stakedUserMaxBuyAmount;
 
-    /// @dev The maximum amount of sale tokens an unstaked user can contribute to the launch event.
+    /// @dev The maximum amount of sale tokens an unstaked user can contribute to the launch event in sale token decimals.
     uint256 public immutable unstakedUserMaxBuyAmount;
 
     /// @dev The start time of the auction.
@@ -46,15 +46,15 @@ contract Launchpad is Ownable, ReentrancyGuard {
     uint256 public immutable snapshotTime;
 
     /// @dev The number of days for vesting.
-    uint256 public immutable claimVestingDuration;
+    uint256 public immutable vestingDays;
 
     /// @dev The vevolt to project token ratio.
     uint256 public immutable veVoltPerProjectToken;
 
-    /// @dev The minimum amount he projects wants to raise.
+    /// @dev The minimum amount he projects wants to raise in sale token decimals.
     uint256 public immutable minSaleTokenReserve;
 
-    /// @dev The maximum amount the project wants to raise.
+    /// @dev The maximum amount the project wants to raise in sale token decimals.
     uint256 public immutable maxSaleTokenReserve;
 
     /// @dev The address of the project treasury.
@@ -115,7 +115,7 @@ contract Launchpad is Ownable, ReentrancyGuard {
             "constructor: endTime should be after startTime"
         );
         require(
-            _params.claimVestingDuration < 90,
+            _params.vestingDays < 90,
             "constructor: vesting maximum 90 days"
         );
 
@@ -138,7 +138,7 @@ contract Launchpad is Ownable, ReentrancyGuard {
         endTime = _params.endTime;
         snapshotTime = _params.snapshotTime;
 
-        claimVestingDuration = _params.claimVestingDuration;
+        vestingDays = _params.vestingDays;
     }
 
     modifier saleActive() {
@@ -205,12 +205,12 @@ contract Launchpad is Ownable, ReentrancyGuard {
         UserInfo memory userInfo = usersInfo[_user];
         uint256 allocation = getUserAllocation(_user);
 
-        if (elapsedDays >= claimVestingDuration) {
+        if (elapsedDays >= vestingDays) {
             uint256 remainingClaim = allocation - userInfo.totalClaimed;
-            return (claimVestingDuration, remainingClaim);
+            return (vestingDays, remainingClaim);
         } else {
             uint256 daysVested = elapsedDays - userInfo.daysClaimed;
-            uint256 amountVestedPerDay = allocation / claimVestingDuration;
+            uint256 amountVestedPerDay = allocation / vestingDays;
             return (daysVested, daysVested * amountVestedPerDay);
         }
     }

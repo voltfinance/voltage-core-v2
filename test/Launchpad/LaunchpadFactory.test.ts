@@ -151,7 +151,7 @@ describe('LaunchpadFactory', () => {
         startTime: timeNow.add('25'),
         endTime: timeNow.add('100'),
         snapshotTime: timeNow.add('5'),
-        claimVestingDuration: 0,
+        vestingDays: 0,
         projectTreasury: projectTreasury.address,
       }
     })
@@ -164,7 +164,7 @@ describe('LaunchpadFactory', () => {
       await expect(
         factory.createLaunchpad({
           ...launchpadParams,
-          claimVestingDuration: 5,
+          vestingDays: 5,
         }),
       ).not.be.reverted
     })
