@@ -36,7 +36,7 @@ contract RewardDistributor is ReentrancyGuard {
     mapping(uint256 => mapping(address => Distribution))
         public userDistribution;
 
-    mapping(address => Distribution[]) public userDistributions;
+    mapping(address => uint256[]) public userRewards;
 
     modifier onlyOwner() {
         require(owner == msg.sender);
@@ -55,8 +55,15 @@ contract RewardDistributor is ReentrancyGuard {
 
     function getUserDistributions(
         address _user
-    ) public view returns (Distribution[] memory) {
-        return userDistributions[_user];
+    ) public view returns (Distribution[] memory) {        
+        Distribution[] memory distributions = new Distribution[](userRewards[_user].length);
+
+        for (uint256 i = 0; i < userRewards[_user].length; i++) {
+            uint256 rewardId = userRewards[_user][i];
+            distributions[i] = userDistribution[rewardId][_user];
+        }
+
+        return distributions;
     }
 
     function changeOwner(address _newOwner) public onlyOwner {
@@ -125,7 +132,7 @@ contract RewardDistributor is ReentrancyGuard {
         });
 
         userDistribution[_rewardId][_user] = distribution;
-        userDistributions[_user].push(distribution);
+        userRewards[_user].push(_rewardId);
     }
 
     function claimDistribution(uint256 _rewardId) public nonReentrant {

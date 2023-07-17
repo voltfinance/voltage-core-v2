@@ -104,6 +104,28 @@ describe('RewardDistributor', () => {
           .addDistribution(0, user.address, ethers.utils.parseEther('50')),
       ).not.reverted
     })
+    it('should fail if user already has distribution', async () => {
+      await rewardDistributor.addReward(
+        '50 Volt',
+        'Welcome Reward',
+        token.address,
+        ethers.utils.parseEther('50'),
+        false,
+        false,
+      )
+
+      await expect(
+        rewardDistributor
+          .connect(distributor)
+          .addDistribution(0, user.address, ethers.utils.parseEther('50')),
+      ).be.not.reverted
+
+      await expect(
+        rewardDistributor
+          .connect(distributor)
+          .addDistribution(0, user.address, ethers.utils.parseEther('50')),
+      ).be.reverted
+    })
   })
 
   describe('claim distribution', () => {
@@ -170,6 +192,7 @@ describe('RewardDistributor', () => {
         balanceBefore.add(ethers.utils.parseEther('75')),
       )
     })
+
     it('user should be able to claim fuse fixed distribution', async () => {
       rewardDistributor.addReward(
         'Deposit Volt Reward',
