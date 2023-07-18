@@ -586,7 +586,7 @@ describe('Launchpad', () => {
       ).be.revertedWith('buy: user hardcap reached')
 
       await expect(
-        launchpad.connect(alice).buy(parseUnits6('8000')),
+        launchpad.connect(alice).buy(parseUnits6('8260')),
       ).be.revertedWith('buy: user hardcap reached')
 
       await expect(
