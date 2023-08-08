@@ -245,11 +245,11 @@ contract Launchpad is Ownable, ReentrancyGuard {
             ILaunchpadFactory(launchpadFactory).SCALE();
         uint256 amountWithoutFee = saleTokenReserve - fee;
 
-        IERC20(saleToken).transfer(
+        IERC20(saleToken).safeTransfer(
             ILaunchpadFactory(launchpadFactory).owner(),
             fee
         );
-        IERC20(saleToken).transfer(projectTreasury, amountWithoutFee);
+        IERC20(saleToken).safeTransfer(projectTreasury, amountWithoutFee);
     }
 
     /**
@@ -258,7 +258,7 @@ contract Launchpad is Ownable, ReentrancyGuard {
     function withdrawUnsoldProjectTokens() public saleEnded {
         uint256 soldTokens = tokensToDistribute();
         uint256 remainingTokens = projectTokenReserve - soldTokens;
-        IERC20(projectToken).transfer(projectTreasury, remainingTokens);
+        IERC20(projectToken).safeTransfer(projectTreasury, remainingTokens);
     }
 
     /**
@@ -283,7 +283,7 @@ contract Launchpad is Ownable, ReentrancyGuard {
         user.balance += _amount;
         saleTokenReserve += _amount;
 
-        IERC20(saleToken).transferFrom(msg.sender, address(this), _amount);
+        IERC20(saleToken).safeTransferFrom(msg.sender, address(this), _amount);
 
         emit Bought(msg.sender, _amount);
     }
@@ -307,8 +307,8 @@ contract Launchpad is Ownable, ReentrancyGuard {
             ILaunchpadFactory(launchpadFactory).SCALE();
         uint256 amountWithFee = _amount - fee;
 
-        IERC20(saleToken).transfer(msg.sender, amountWithFee);
-        IERC20(saleToken).transfer(
+        IERC20(saleToken).safeTransfer(msg.sender, amountWithFee);
+        IERC20(saleToken).safeTransfer(
             ILaunchpadFactory(launchpadFactory).owner(),
             fee
         );
@@ -330,7 +330,7 @@ contract Launchpad is Ownable, ReentrancyGuard {
         userInfo.daysClaimed += daysVested;
         userInfo.totalClaimed += amountVested;
 
-        IERC20(projectToken).transfer(msg.sender, amountVested);
+        IERC20(projectToken).safeTransfer(msg.sender, amountVested);
 
         emit Claimed(msg.sender, amountVested);
     }

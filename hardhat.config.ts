@@ -7,6 +7,9 @@ import "@nomiclabs/hardhat-vyper";
 import "hardhat-contract-sizer";
 import "solidity-coverage";
 import '@typechain/hardhat'
+import dotenv from 'dotenv'
+
+dotenv.config()
 
 const config = {
   solidity: {
@@ -27,10 +30,10 @@ const config = {
   },
   networks: {
     hardhat: {},
-    // spark: {
-    //   url: 'https://rpc.fusespark.io',
-    //   accounts: [`0x${process.env.PRIVATE_KEY}`]
-    // },
+    spark: {
+      url: 'https://rpc.fusespark.io',
+      accounts: [`0x${process.env.PRIVATE_KEY}`]
+    },
     // fuse: {
     //   url: 'https://rpc.fuse.io',
     //   accounts: [`0x${process.env.PRIVATE_KEY}`]

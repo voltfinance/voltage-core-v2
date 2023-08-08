@@ -71,7 +71,7 @@ contract LaunchpadFactory is Ownable {
 
         address launch = address(new Launchpad(_params));
 
-        IERC20(_params.projectToken).transferFrom(
+        IERC20(_params.projectToken).safeTransferFrom(
             msg.sender,
             launch,
             _params.projectTokenReserve
