@@ -16,7 +16,7 @@ async function main() {
 
   console.log(
     `\nVolt voting lockup contract is deployed at ${votingEscrow.address}`
-  )
+  ) 
 
   const startTime = 1688126400
 
