@@ -227,13 +227,15 @@ contract Launchpad is Ownable, ReentrancyGuard {
             ILaunchpadFactory(launchpadFactory).veVolt()
         ).balanceOf(_user, snapshotTime);
 
-        uint256 stakedUserAllocation = Math.min(
-            veVoltBalance / veVoltPerProjectToken * (10**ERC20(saleToken).decimals()),
+        uint256 stakedUserAllocation = (((veVoltBalance * 1e18 / veVoltPerProjectToken) * 10**ERC20(saleToken).decimals()) / 1e18);
+
+        uint256 finalStakedUserAllocation = Math.min(
+            unstakedUserMaxBuyAmount + stakedUserAllocation,
             stakedUserMaxBuyAmount
         );
 
         return
-            veVoltBalance > 0 ? stakedUserAllocation : unstakedUserMaxBuyAmount;
+            veVoltBalance > 0 ? finalStakedUserAllocation : unstakedUserMaxBuyAmount;
     }
 
     /**
